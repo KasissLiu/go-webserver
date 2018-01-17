@@ -1,11 +1,12 @@
 package main
 
 import (
-	"ksweb/servers/dynamicServer"
-	"ksweb/servers/fileServer"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/KasissLiu/go-webserver/servers/dynamicServer"
+	"github.com/KasissLiu/go-webserver/servers/fileServer"
 )
 
 type Server struct {

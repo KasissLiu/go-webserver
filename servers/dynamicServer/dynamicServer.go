@@ -1,9 +1,10 @@
 package dynamicServer
 
 import (
-	"ksweb/routes"
 	"net/http"
 	"strings"
+
+	"github.com/KasissLiu/go-webserver/routes"
 )
 
 type DynamicServer struct {

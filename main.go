@@ -6,9 +6,9 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/KasissLiu/go-tools/loadConfig"
 	"github.com/KasissLiu/go-webserver/servers/dynamicServer"
 	"github.com/KasissLiu/go-webserver/servers/fileServer"
-	"github.com/KasissLiu/tools/loadConfig"
 )
 
 type Server struct {

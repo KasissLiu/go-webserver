@@ -3,15 +3,18 @@ package main
 import (
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/KasissLiu/go-webserver/servers/dynamicServer"
 	"github.com/KasissLiu/go-webserver/servers/fileServer"
+	"github.com/KasissLiu/tools/loadConfig"
 )
 
 type Server struct {
 	FileServer    *fileServer.FileServer
 	DynamicServer *dynamicServer.DynamicServer
+	port          int
 	startTime     time.Time
 	accessTimes   int
 	websocketCons int
@@ -73,21 +76,38 @@ func (this *Server) getAccessStat() (stat map[string]int) {
 }
 
 var httpServer Server
+var httpConfig *loadConfig.Config
 
 func init() {
-
-	fileServer := fileServer.New("/nginx/openSourceCode/kasiss-web/build", "index.html", nil, nil)
-	dynamicServer := dynamicServer.New()
-	startTime := time.Now()
-	httpServer = Server{fileServer, dynamicServer, startTime, 0, 0}
+	initConfig()
+	initServer()
 }
 
-func loadConfig() {
+func initConfig() {
+	httpConfig = loadConfig.New("kasiss", "./config/server.ini")
+}
 
+func initServer() {
+	fileRoot, error := httpConfig.Get("root").String()
+	if error != nil {
+		panic("set default root path")
+	}
+	port, error := httpConfig.Get("port").Int()
+	if error != nil {
+		port = 8000
+	}
+	index, error := httpConfig.Get("index").String()
+	if error != nil {
+		index = "index.html"
+	}
+	fileServer := fileServer.New(fileRoot, index, nil, nil)
+	dynamicServer := dynamicServer.New()
+	startTime := time.Now()
+	httpServer = Server{fileServer, dynamicServer, port, startTime, 0, 0}
 }
 
 func main() {
-
-	http.ListenAndServe(":8000", &httpServer)
+	httpPort := ":" + strconv.Itoa(httpServer.port)
+	http.ListenAndServe(httpPort, &httpServer)
 
 }

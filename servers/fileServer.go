@@ -1,4 +1,4 @@
-package fileServer
+package servers
 
 import (
 	"io"
@@ -75,6 +75,6 @@ func (this *FileServer) readFile(path string) ([]byte, error) {
 	return content, nil
 }
 
-func New(baseDir string, index string, exts []string, extType map[string]string) *FileServer {
+func NewFileServer(baseDir string, index string, exts []string, extType map[string]string) *FileServer {
 	return &FileServer{baseDir, index, exts, extType}
 }

@@ -1,10 +1,8 @@
-package dynamicServer
+package servers
 
 import (
 	"net/http"
 	"strings"
-
-	"github.com/KasissLiu/go-webserver/routes"
 )
 
 type DynamicServer struct {
@@ -16,11 +14,11 @@ type DynamicServer struct {
 func (this *DynamicServer) CheckDynamic(path string) bool {
 	path = strings.Trim(path, "/")
 
-	if function, ok := web[path]; ok {
+	if function, ok := Web[path]; ok {
 		this.execFunc = function
 		return true
 	}
-	if function, ok := api[path]; ok {
+	if function, ok := Api[path]; ok {
 		this.execFunc = function
 		return true
 	}
@@ -32,26 +30,12 @@ func (this *DynamicServer) DoDynamic(w http.ResponseWriter, r *http.Request) {
 }
 
 func (this *DynamicServer) getAlias(req string) string {
-	if val, ok := alias[req]; ok {
+	if val, ok := Alias[req]; ok {
 		return val
 	}
 	return req
 }
 
-var web map[string]func(http.ResponseWriter, *http.Request)
-var api map[string]func(http.ResponseWriter, *http.Request)
-var alias map[string]string
-
-func init() {
-	web = make(map[string]func(http.ResponseWriter, *http.Request), 0)
-	api = make(map[string]func(http.ResponseWriter, *http.Request), 0)
-	alias = make(map[string]string, 10)
-
-	web = routes.Web
-	api = routes.Api
-
-}
-
-func New() *DynamicServer {
-	return &DynamicServer{web, api, nil}
+func NewDynamicServer() *DynamicServer {
+	return &DynamicServer{Web, Api, nil}
 }

@@ -11,8 +11,8 @@ import (
 
 //初始化变量
 var HttpServer Server
+var HttpServerTLS Server
 var HttpConfig *loadConfig.Config
-var DbConfig *loadConfig.Config
 
 var Web map[string]func(http.ResponseWriter, *http.Request)
 var Api map[string]func(http.ResponseWriter, *http.Request)
@@ -29,22 +29,82 @@ func initConfig() {
 }
 
 func initServer() {
-	fileRoot, error := HttpConfig.Get("root").String()
+	//http config
+	httpFileRoot, error := HttpConfig.Get("http").Get("root").String()
 	if error != nil {
 		panic("set default root path")
 	}
-	port, error := HttpConfig.Get("port").Int()
+	httpPort, error := HttpConfig.Get("http").Get("port").Int()
 	if error != nil {
-		port = 8000
+		httpPort = 8000
 	}
-	index, error := HttpConfig.Get("index").String()
+	httpIndex, error := HttpConfig.Get("http").Get("index").String()
 	if error != nil {
-		index = "index.html"
+		httpIndex = "index.html"
 	}
-	fileServer := NewFileServer(fileRoot, index, nil, nil)
+	var httpOpen bool
+	_, error = HttpConfig.Get("http").Get("type").String()
+	if error == nil {
+		httpOpen = true
+	} else {
+		httpOpen = false
+	}
+
+	//https config
+	httpsFileRoot, error := HttpConfig.Get("https").Get("root").String()
+	if error != nil {
+		httpsFileRoot = ""
+	}
+	httpsIndex, error := HttpConfig.Get("https").Get("index").String()
+	if error != nil {
+		httpsIndex = "index.html"
+	}
+	httpsPort, error := HttpConfig.Get("https").Get("port").Int()
+	if error != nil {
+		httpsPort = 443
+	}
+	httpsCrt, error := HttpConfig.Get("https").Get("crt").String()
+	if error != nil {
+		httpsCrt = ""
+	}
+	httpsKey, error := HttpConfig.Get("https").Get("key").String()
+	if error != nil {
+		httpsKey = ""
+	}
+
+	var httpsOpen bool
+	_, error = HttpConfig.Get("https").Get("type").String()
+	if error == nil {
+		httpsOpen = true
+	} else {
+		httpsOpen = false
+	}
+
 	dynamicServer := NewDynamicServer()
 	StartTime := time.Now()
-	HttpServer = Server{fileServer, dynamicServer, port, StartTime, 0, 0}
+	//make a http Server
+	httpFileServer := NewFileServer(httpFileRoot, httpIndex, nil, nil)
+	HttpServer = Server{
+		FileServer:    httpFileServer,
+		DynamicServer: dynamicServer,
+		Port:          httpPort,
+		Open:          httpOpen,
+		StartTime:     StartTime,
+		AccessTimes:   0,
+		WebsocketCons: 0}
+
+	//make a https Server
+	httpsFileServer := NewFileServer(httpsFileRoot, httpsIndex, nil, nil)
+	HttpServerTLS = Server{
+		FileServer:    httpsFileServer,
+		DynamicServer: dynamicServer,
+		Port:          httpsPort,
+		Open:          httpsOpen,
+		HttpsCrt:      httpsCrt,
+		HttpsKey:      httpsKey,
+		StartTime:     StartTime,
+		AccessTimes:   0,
+		WebsocketCons: 0}
 }
 
 func initRoute() {
@@ -54,7 +114,6 @@ func initRoute() {
 
 	Web = routes.Web
 	Api = routes.Api
-
 }
 
 func syncServerState() {

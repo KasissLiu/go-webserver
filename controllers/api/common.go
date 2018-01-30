@@ -8,7 +8,7 @@ import (
 	m "github.com/KasissLiu/go-webserver/models"
 )
 
-func GetServerState(w http.ResponseWriter, h *http.Request) {
+func GetServerState(w http.ResponseWriter, r *http.Request) {
 	status := m.State.GetServerState()
 	responseJson(0, "success", status, w)
 }

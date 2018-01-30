@@ -10,6 +10,9 @@ type Server struct {
 	FileServer    *FileServer
 	DynamicServer *DynamicServer
 	Port          int
+	Open          bool
+	HttpsCrt      string
+	HttpsKey      string
 	StartTime     time.Time
 	AccessTimes   int
 	WebsocketCons int

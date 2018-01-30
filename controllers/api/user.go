@@ -7,14 +7,14 @@ import (
 	m "github.com/KasissLiu/go-webserver/models"
 )
 
-type uController struct{}
+type userController struct{}
 
 var User userController = userController{}
 
-func (u *userController) GetUserById(w http.ResponseWriter, h *http.Request) {
-	h.ParseForm()
+func (u *userController) GetUserById(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
 
-	id := h.Form.Get("id")
+	id := r.Form.Get("id")
 	if id == "" {
 		responseJson(1, "id未获取到", "", w)
 		return

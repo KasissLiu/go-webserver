@@ -49,6 +49,7 @@ func (this *FileServer) FileOutput(w http.ResponseWriter, r *http.Request) {
 
 }
 
+//输出默认页面
 func (this *FileServer) IndexOutput(w http.ResponseWriter) {
 	content, err := this.readFile(this.BaseDir + "/" + this.Index)
 	if err != nil {
@@ -59,6 +60,7 @@ func (this *FileServer) IndexOutput(w http.ResponseWriter) {
 	io.WriteString(w, string(content))
 }
 
+//读取文件
 func (this *FileServer) readFile(path string) ([]byte, error) {
 	file, err := os.Open(path)
 
@@ -75,6 +77,7 @@ func (this *FileServer) readFile(path string) ([]byte, error) {
 	return content, nil
 }
 
+//生成并返回一个新的文件服务器实例
 func NewFileServer(baseDir string, index string, exts []string, extType map[string]string) *FileServer {
 	return &FileServer{baseDir, index, exts, extType}
 }

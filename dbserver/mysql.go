@@ -9,6 +9,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+//mysql配置结构
 type MysqlConfig struct {
 	Host    string
 	Port    int
@@ -18,8 +19,10 @@ type MysqlConfig struct {
 	Charset string
 }
 
+//mysql配置map 保存多个mysql配置
 var MysqlConfigs map[string]MysqlConfig
 
+//自动解析加载多个mysql配置
 func init() {
 	localdb := loadConfig.New("mysql", "./config/db.ini")
 	configs := localdb.GetAll()
@@ -70,6 +73,7 @@ func init() {
 	}
 }
 
+//获取一个mysql链接
 func GetMysql(connName string) (*sql.DB, error) {
 
 	if c, ok := MysqlConfigs[connName]; ok {

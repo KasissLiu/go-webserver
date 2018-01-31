@@ -22,8 +22,11 @@ type User struct {
 
 type userModel struct{}
 
+//模型实例
+//用于实际调用查询或者写入
 var UserModel userModel
 
+//获取单个用户
 func (u *userModel) GetUserById(id int) (User, error) {
 	newUser := User{}
 	db, err := dbserver.GetMysql(connName)
@@ -38,6 +41,7 @@ func (u *userModel) GetUserById(id int) (User, error) {
 	return newUser, nil
 }
 
+//获取所有用户
 func (u *userModel) GetUserAll() (users []User) {
 	users = make([]User, 0, 10)
 	db, err := dbserver.GetMysql(connName)

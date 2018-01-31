@@ -10,24 +10,28 @@ import (
 )
 
 //初始化变量
-var HttpServer Server
-var HttpServerTLS Server
-var HttpConfig *loadConfig.Config
+var HttpServer Server             //http实例
+var HttpServerTLS Server          //https实例
+var HttpConfig *loadConfig.Config //服务器配置实例
 
+//路由配置
 var Web map[string]func(http.ResponseWriter, *http.Request)
 var Api map[string]func(http.ResponseWriter, *http.Request)
 var Alias map[string]string
 
+//初始化函数
 func init() {
 	initConfig()
 	initServer()
 	initRoute()
 }
 
+//初始化服务器配置
 func initConfig() {
 	HttpConfig = loadConfig.New("kasiss", "./config/server.ini")
 }
 
+//初始化服务器实例
 func initServer() {
 	//http config
 	httpFileRoot, error := HttpConfig.Get("http").Get("root").String()
@@ -107,6 +111,7 @@ func initServer() {
 		WebsocketCons: 0}
 }
 
+//初始化路由数据
 func initRoute() {
 	Web = make(map[string]func(http.ResponseWriter, *http.Request), 0)
 	Api = make(map[string]func(http.ResponseWriter, *http.Request), 0)
@@ -116,6 +121,7 @@ func initRoute() {
 	Api = routes.Api
 }
 
+//主动同步服务器数据
 func syncServerState() {
 	state := HttpServer.GetAccessStat()
 	models.State.SetServerState(state)

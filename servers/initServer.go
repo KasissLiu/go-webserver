@@ -17,18 +17,31 @@ var HttpConfig *loadConfig.Config //服务器配置实例
 //路由配置
 var Web map[string]func(http.ResponseWriter, *http.Request)
 var Api map[string]func(http.ResponseWriter, *http.Request)
+var Ws map[string]func(http.ResponseWriter, *http.Request)
 var Alias map[string]string
 
 //初始化函数
 func init() {
 	initConfig()
-	initServer()
 	initRoute()
+	initServer()
 }
 
 //初始化服务器配置
 func initConfig() {
 	HttpConfig = loadConfig.New("kasiss", "./config/server.ini")
+}
+
+//初始化路由数据
+func initRoute() {
+	Web = make(map[string]func(http.ResponseWriter, *http.Request), 0)
+	Api = make(map[string]func(http.ResponseWriter, *http.Request), 0)
+	Ws = make(map[string]func(http.ResponseWriter, *http.Request), 0)
+	Alias = make(map[string]string, 10)
+
+	Web = routes.Web
+	Api = routes.Api
+	Ws = routes.Ws
 }
 
 //初始化服务器实例
@@ -95,7 +108,8 @@ func initServer() {
 		Open:          httpOpen,
 		StartTime:     StartTime,
 		AccessTimes:   0,
-		WebsocketCons: 0}
+		WebsocketCons: 0,
+	}
 
 	//make a https Server
 	httpsFileServer := NewFileServer(httpsFileRoot, httpsIndex, nil, nil)
@@ -108,17 +122,8 @@ func initServer() {
 		HttpsKey:      httpsKey,
 		StartTime:     StartTime,
 		AccessTimes:   0,
-		WebsocketCons: 0}
-}
-
-//初始化路由数据
-func initRoute() {
-	Web = make(map[string]func(http.ResponseWriter, *http.Request), 0)
-	Api = make(map[string]func(http.ResponseWriter, *http.Request), 0)
-	Alias = make(map[string]string, 10)
-
-	Web = routes.Web
-	Api = routes.Api
+		WebsocketCons: 0,
+	}
 }
 
 //主动同步服务器数据

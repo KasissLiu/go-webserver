@@ -23,20 +23,29 @@ func (this *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	this.AccessTimes++
 	syncServerState()
+
 	//解析请求
 	switch this.ParseServer(r) {
 	case "file":
 		this.FileServer.FileOutput(w, r)
 	case "dynamic":
-		this.DynamicServer.DoDynamic(w, r)
+		this.DynamicServer.Execute(w, r)
+	case "websocket":
+		this.WebsocketCons++
+		syncServerState()
+		this.DynamicServer.Execute(w, r)
+		this.WebsocketCons--
 	default:
 		this.FileServer.IndexOutput(w)
 	}
+
+	syncServerState()
 
 }
 
 //解析请求类型 判断是否是文件请求或者数据请求
 func (this *Server) ParseServer(r *http.Request) string {
+
 	//判断是否是静态文件
 	if this.checkFileExist(this.FileServer.BaseDir + r.URL.Path) {
 		return "file"
@@ -45,6 +54,10 @@ func (this *Server) ParseServer(r *http.Request) string {
 	//return "dynamic"
 	if this.DynamicServer.CheckDynamic(r.URL.Path) {
 		return "dynamic"
+	}
+	//判断是否是websocket链接
+	if this.DynamicServer.CheckWebsocket(r.URL.Path) {
+		return "websocket"
 	}
 
 	return "index"

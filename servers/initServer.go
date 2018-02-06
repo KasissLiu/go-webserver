@@ -96,6 +96,17 @@ func initServer() {
 	} else {
 		httpsOpen = false
 	}
+	//服务器配置gzip压缩
+	var gzip bool
+	gzipOpen, error := HttpConfig.Get("server").Get("gzip").String()
+	if error != nil {
+		gzipOpen = "off"
+	}
+	if gzipOpen == "on" {
+		gzip = true
+	} else {
+		gzip = false
+	}
 
 	dynamicServer := NewDynamicServer()
 	StartTime := time.Now()
@@ -109,6 +120,7 @@ func initServer() {
 		StartTime:     StartTime,
 		AccessTimes:   0,
 		WebsocketCons: 0,
+		Gzip:          gzip,
 	}
 
 	//make a https Server
@@ -123,6 +135,7 @@ func initServer() {
 		StartTime:     StartTime,
 		AccessTimes:   0,
 		WebsocketCons: 0,
+		Gzip:          gzip,
 	}
 }
 

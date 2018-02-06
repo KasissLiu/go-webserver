@@ -17,7 +17,6 @@ var upgrader = websocket.Upgrader{
 
 func SyncServerState(w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
-	defer conn.Close()
 	if err != nil {
 		log.Println(err)
 		return

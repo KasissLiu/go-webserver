@@ -3,7 +3,7 @@ package routes
 import (
 	"net/http"
 
-	"github.com/KasissLiu/go-webserver/controllers/api"
+	"github.com/kasiss-liu/go-webserver/controllers/api"
 )
 
 var Api map[string]func(http.ResponseWriter, *http.Request)

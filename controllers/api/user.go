@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	m "github.com/KasissLiu/go-webserver/models"
+	m "github.com/kasiss-liu/go-webserver/models"
 )
 
 type userController struct{}

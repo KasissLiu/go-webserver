@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	m "github.com/KasissLiu/go-webserver/models"
 	"github.com/gorilla/websocket"
+	m "github.com/kasiss-liu/go-webserver/models"
 )
 
 var upgrader = websocket.Upgrader{

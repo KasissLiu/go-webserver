@@ -3,7 +3,7 @@ package models
 import (
 	"errors"
 
-	"github.com/KasissLiu/go-webserver/dbserver"
+	"github.com/kasiss-liu/go-webserver/dbserver"
 
 	_ "github.com/go-sql-driver/mysql"
 )

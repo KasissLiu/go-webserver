@@ -3,7 +3,7 @@ package routes
 import (
 	"net/http"
 
-	"github.com/KasissLiu/go-webserver/controllers/ws"
+	"github.com/kasiss-liu/go-webserver/controllers/ws"
 )
 
 var Ws map[string]func(http.ResponseWriter, *http.Request)

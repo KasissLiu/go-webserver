@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/KasissLiu/go-webserver/servers"
+	"github.com/kasiss-liu/go-webserver/servers"
 )
 
 func main() {

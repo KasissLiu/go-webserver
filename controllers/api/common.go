@@ -5,7 +5,7 @@ import (
 	"io"
 	"net/http"
 
-	m "github.com/KasissLiu/go-webserver/models"
+	m "github.com/kasiss-liu/go-webserver/models"
 )
 
 //获取服务器的运行统计

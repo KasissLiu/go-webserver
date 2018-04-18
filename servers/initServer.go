@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/KasissLiu/go-tools/loadConfig"
-	"github.com/KasissLiu/go-webserver/models"
-	"github.com/KasissLiu/go-webserver/routes"
+	"github.com/kasiss-liu/go-tools/load-config"
+	"github.com/kasiss-liu/go-webserver/models"
+	"github.com/kasiss-liu/go-webserver/routes"
 )
 
 //初始化变量

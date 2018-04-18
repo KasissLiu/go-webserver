@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/KasissLiu/go-tools/loadConfig"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/kasiss-liu/go-tools/load-config"
 )
 
 //mysql配置结构
